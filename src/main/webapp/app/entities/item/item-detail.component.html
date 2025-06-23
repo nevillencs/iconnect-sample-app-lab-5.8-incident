@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="item">
+            <h2><span jhiTranslate="iconnectSampleAppLabApp.item.detail.title">Item</span> {{ item.id }}</h2>
+
+            <hr>
+
+            <ic-alert-error></ic-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="iconnectSampleAppLabApp.item.itemReferenceId">Item Reference Id</span></dt>
+                <dd>
+                    <span>{{ item.itemReferenceId }}</span>
+                </dd>
+                <dt><span jhiTranslate="iconnectSampleAppLabApp.item.itemName">Item Name</span></dt>
+                <dd>
+                    <span>{{ item.itemName }}</span>
+                </dd>
+                <dt><span jhiTranslate="iconnectSampleAppLabApp.item.incident">Incident</span></dt>
+                <dd>
+                    <div *ngIf="item.incidentId">
+                        <a [routerLink]="['/incident', item.incidentId, 'view']">{{ item.incidentIncidentName }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/item', item.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

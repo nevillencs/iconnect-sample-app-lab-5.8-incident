@@ -1,0 +1,101 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="ic-incident-heading" jhiTranslate="iconnectSampleAppLabApp.incident.home.createOrEditLabel">Create or edit a Incident</h2>
+
+            <div>
+                <ic-alert-error></ic-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.incident.incidentReferenceId" for="field_incidentReferenceId">Incident Reference Id</label>
+                    <input type="text" class="form-control" name="incidentReferenceId" id="field_incidentReferenceId"
+                           formControlName="incidentReferenceId"/>
+                    <div *ngIf="editForm.get('incidentReferenceId')!.invalid && (editForm.get('incidentReferenceId')!.dirty || editForm.get('incidentReferenceId')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentReferenceId')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentReferenceId')?.errors?.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 6 }">
+                        This field is required to be at least 6 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentReferenceId')?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 6 }">
+                        This field cannot be longer than 6 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentReferenceId')?.errors?.pattern" jhiTranslate="entity.validation.pattern" [translateValues]="{ pattern: 'Incident Reference Id' }">
+                            This field should follow pattern for "Incident Reference Id".
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.incident.incidentName" for="field_incidentName">Incident Name</label>
+                    <input type="text" class="form-control" name="incidentName" id="field_incidentName"
+                           formControlName="incidentName"/>
+                    <div *ngIf="editForm.get('incidentName')!.invalid && (editForm.get('incidentName')!.dirty || editForm.get('incidentName')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentName')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentName')?.errors?.minlength" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: 10 }">
+                        This field is required to be at least 10 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentName')?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 20 }">
+                        This field cannot be longer than 20 characters.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.incident.incidentStatus" for="field_incidentStatus">Incident Status</label>
+                    <select class="form-control" name="incidentStatus" formControlName="incidentStatus" id="field_incidentStatus">
+                        <option value="Pending">{{ 'iconnectSampleAppLabApp.IncidentStatus.Pending' | translate }}</option>
+                        <option value="Active">{{ 'iconnectSampleAppLabApp.IncidentStatus.Active' | translate }}</option>
+                        <option value="Closed">{{ 'iconnectSampleAppLabApp.IncidentStatus.Closed' | translate }}</option>
+                    </select>
+                    <div *ngIf="editForm.get('incidentStatus')!.invalid && (editForm.get('incidentStatus')!.dirty || editForm.get('incidentStatus')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentStatus')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.incident.incidentDate" for="field_incidentDate">Incident Date</label>
+                    <div class="input-group">
+                        <input id="field_incidentDate" type="text" class="form-control" name="incidentDate" ngbDatepicker #incidentDateDp="ngbDatepicker" formControlName="incidentDate"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="incidentDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div *ngIf="editForm.get('incidentDate')!.invalid && (editForm.get('incidentDate')!.dirty || editForm.get('incidentDate')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('incidentDate')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

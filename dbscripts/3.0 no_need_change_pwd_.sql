@@ -1,0 +1,1 @@
+UPDATE tbl_aa_subject_login SET PASSWORD_CHANGED_DATE = NOW() 

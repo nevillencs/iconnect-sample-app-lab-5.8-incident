@@ -1,0 +1,26 @@
+{
+  "iconnectSampleAppLabApp": {
+    "incident": {
+      "home": {
+        "title": "Incidents",
+        "createLabel": "创建新 Incident",
+        "createOrEditLabel": "创建或编辑 Incident",
+        "notFound": "No Incidents found"
+      },
+      "created": "Incident {{ param }} 创建成功",
+      "updated": "Incident {{ param }} 更新成功",
+      "deleted": "Incident {{ param }} 删除成功",
+      "delete": {
+        "question": "你确定要删除 Incident {{ id }} 吗？"
+      },
+      "detail": {
+        "title": "Incident"
+      },
+      "incidentReferenceId": "Incident Reference Id",
+      "incidentName": "Incident Name",
+      "incidentStatus": "Incident Status",
+      "incidentDate": "Incident Date",
+      "item": "Item"
+    }
+  }
+}

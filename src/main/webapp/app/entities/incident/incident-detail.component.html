@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="incident">
+            <h2><span jhiTranslate="iconnectSampleAppLabApp.incident.detail.title">Incident</span> {{ incident.id }}</h2>
+
+            <hr>
+
+            <ic-alert-error></ic-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="iconnectSampleAppLabApp.incident.incidentReferenceId">Incident Reference Id</span></dt>
+                <dd>
+                    <span>{{ incident.incidentReferenceId }}</span>
+                </dd>
+                <dt><span jhiTranslate="iconnectSampleAppLabApp.incident.incidentName">Incident Name</span></dt>
+                <dd>
+                    <span>{{ incident.incidentName }}</span>
+                </dd>
+                <dt><span jhiTranslate="iconnectSampleAppLabApp.incident.incidentStatus">Incident Status</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'iconnectSampleAppLabApp.IncidentStatus.' + incident.incidentStatus }}">{{ incident.incidentStatus }}</span>
+                </dd>
+                <dt><span jhiTranslate="iconnectSampleAppLabApp.incident.incidentDate">Incident Date</span></dt>
+                <dd>
+                    <span>{{ incident.incidentDate }}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/incident', incident.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

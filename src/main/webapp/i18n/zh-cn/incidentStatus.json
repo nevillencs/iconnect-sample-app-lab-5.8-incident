@@ -1,0 +1,10 @@
+{
+  "iconnectSampleAppLabApp": {
+    "IncidentStatus": {
+      "null": "",
+      "Pending": "Pending",
+      "Active": "Active",
+      "Closed": "Closed"
+    }
+  }
+}
