@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -45,26 +46,33 @@ public class WardServiceTest {
 
    @Test
    public void testAddCallsRepository(){
-       when(wardRepository.save(prepareWard())).thenReturn(prepareWard());
-       Ward wardResult = wardService.add(prepareWard());
-       verify(wardRepository, times(1)).save(prepareWard());
+        Ward ward = prepareWard();
+        when(wardRepository.save(ward)).thenReturn(ward);
+        Ward wardResult = wardService.add(ward);
+        verify(wardRepository, times(1)).save(ward);
    }
     @Test
     public void testUpdateCallsRepository(){
-        when(wardRepository.save(prepareWard())).thenReturn(prepareWard());
-        Ward wardResult = wardService.update(prepareWard());
-        verify(wardRepository, times(1)).save(prepareWard());
+        Ward ward = prepareWard();
+        when(wardRepository.save(ward)).thenReturn(ward);
+        Ward wardResult = wardService.update(ward);
+        verify(wardRepository, times(1)).save(ward);
     }
     @Test
     public void testDeleteCallsRepository(){
         Ward ward = prepareWard();
+        when(wardRepository.getOne(ward.getId())).thenReturn(ward);
         wardService.delete(ward.getId());
         verify(wardRepository, times(1)).delete(ward);
     }
     @Test
     public void testDeleteNullCallsRepository(){
-        wardService.delete(null);
-        verifyNoInteractions(wardRepository);
+        Ward ward = prepareWard();
+        when(wardRepository.getOne(ward.getId())).thenReturn(null);
+        assertDoesNotThrow(() -> wardService.delete(ward.getId()));
+        verify(wardRepository, times(1)).getOne(ward.getId());
+        verify(wardRepository, never()).delete(any(Ward.class));
+        verifyNoMoreInteractions(wardRepository);
     }
     private Ward prepareWard() {
         Ward ward = new Ward();

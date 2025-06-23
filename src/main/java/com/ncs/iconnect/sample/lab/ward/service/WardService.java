@@ -27,18 +27,35 @@ public class WardService implements WardServiceInterface{
     }
     @Override
     public Page<Ward> search(String wardName, Pageable page) {
-        return null;
+        return wardRepository.findByWardName(wardName, page);
     }
     @Override
     public Ward add(Ward entity) {
-        return null;
+        if (entity.getWardReferenceId() == null) {
+            return null;
+        }
+        else if (entity.getWardName() == null) {
+            return null;
+        }
+        return wardRepository.save(entity);
     }
+
     @Override
     public Ward update(Ward entity) {
-        return null;
+        if (entity.getWardReferenceId() == null) {
+            return null;
+        }
+        else if (entity.getWardName() == null) {
+            return null;
+        }
+        return wardRepository.save(entity);
     }
 
     @Override
     public void delete(Long id) {
+        Ward ward = wardRepository.getOne(id);
+        if (ward != null) {
+            wardRepository.delete(ward);
+        }
     }
 }
