@@ -25,17 +25,14 @@ public class WardService implements WardServiceInterface{
     public Page<Ward> findAll(Pageable pageable) {
         return wardRepository.findAll(pageable);
     }
-
     @Override
-    public Ward find(Long id) {
+    public Page<Ward> search(String wardName, Pageable page) {
         return null;
     }
-
     @Override
     public Ward add(Ward entity) {
         return null;
     }
-
     @Override
     public Ward update(Ward entity) {
         return null;
@@ -43,11 +40,5 @@ public class WardService implements WardServiceInterface{
 
     @Override
     public void delete(Long id) {
-
-    }
-
-    @Override
-    public Page<Ward> search(String wardName, Pageable page) {
-        return null;
     }
 }

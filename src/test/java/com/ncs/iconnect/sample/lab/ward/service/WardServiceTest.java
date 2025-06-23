@@ -1,8 +1,4 @@
 package com.ncs.iconnect.sample.lab.ward.service;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -18,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import com.ncs.iconnect.sample.lab.ward.domain.Ward;
 import com.ncs.iconnect.sample.lab.ward.repository.WardRepository;
 
+import static org.mockito.Mockito.*;
+
 public class WardServiceTest {
 
     WardService wardService;
@@ -29,13 +27,45 @@ public class WardServiceTest {
     }
 
     @Test
-    public void testFindAllWardsExpectSuccess(){
+    public void testFindAllCallsRepository(){
         Pageable page = PageRequest.of(0, 10);
         when(wardRepository.findAll(page)).thenReturn(prepareSearchResults(page));
         Page<Ward> searchResults = wardService.findAll(page);
         verify(wardRepository, times(1)).findAll(page);
     }
 
+    @Test
+    public void testSearchCallsRepository(){
+        Pageable page = PageRequest.of(0, 10);
+        String wardNameQuery = "Alp";
+        when(wardRepository.findByWardName(wardNameQuery, page)).thenReturn(prepareSearchResults(page));
+        Page<Ward> searchResults = wardService.search(wardNameQuery, page);
+        verify(wardRepository, times(1)).findByWardName(wardNameQuery, page);
+    }
+
+   @Test
+   public void testAddCallsRepository(){
+       when(wardRepository.save(prepareWard())).thenReturn(prepareWard());
+       Ward wardResult = wardService.add(prepareWard());
+       verify(wardRepository, times(1)).save(prepareWard());
+   }
+    @Test
+    public void testUpdateCallsRepository(){
+        when(wardRepository.save(prepareWard())).thenReturn(prepareWard());
+        Ward wardResult = wardService.update(prepareWard());
+        verify(wardRepository, times(1)).save(prepareWard());
+    }
+    @Test
+    public void testDeleteCallsRepository(){
+        Ward ward = prepareWard();
+        wardService.delete(ward.getId());
+        verify(wardRepository, times(1)).delete(ward);
+    }
+    @Test
+    public void testDeleteNullCallsRepository(){
+        wardService.delete(null);
+        verifyNoInteractions(wardRepository);
+    }
     private Ward prepareWard() {
         Ward ward = new Ward();
         ward.setWardReferenceId("WRD001");
