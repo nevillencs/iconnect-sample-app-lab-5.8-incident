@@ -23,7 +23,7 @@ public class WardService implements WardServiceInterface{
     @Override
     @Transactional(readOnly = true)
     public Page<Ward> findAll(Pageable pageable) {
-        return null;
+        return wardRepository.findAll(pageable);
     }
 
     @Override
