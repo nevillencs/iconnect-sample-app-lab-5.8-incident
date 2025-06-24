@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ncs.iconnect.sample.lab.ward.repository.WardRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @Transactional
@@ -39,7 +41,16 @@ public class WardService implements WardServiceInterface{
         }
         return wardRepository.save(entity);
     }
-
+    @Override
+    @Transactional(readOnly = true)
+    public Ward find(Long id) {
+        Optional<Ward> ward = wardRepository.findById(id);
+        if (ward.isPresent()) {
+            return ward.get();
+        } else {
+            throw new EntityNotFoundException("Ward not found with id: " + id);
+        }
+    }
     @Override
     public Ward update(Ward entity) {
         if (entity.getWardReferenceId() == null) {

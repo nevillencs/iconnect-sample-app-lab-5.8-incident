@@ -15,7 +15,7 @@ import com.ncs.iconnect.sample.lab.ward.domain.Ward;
 @SuppressWarnings("unused")
 @Repository
 public interface WardRepository extends JpaRepository<Ward, Long> {
-    @Query("FROM Ward t  WHERE " + "LOWER(t.ward_name) LIKE LOWER(CONCAT('%',:wardName, '%'))")
+    @Query("FROM Ward t  WHERE " + "LOWER(t.wardName) LIKE LOWER(CONCAT('%',:wardName, '%'))")
     public Page<Ward> findByWardName(@Param("wardName") String wardName, Pageable page);
 
 }

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Table(name = "t_ward")
+@Table(name = "tbl_ward")
 @Audited
 public class Ward {
 
