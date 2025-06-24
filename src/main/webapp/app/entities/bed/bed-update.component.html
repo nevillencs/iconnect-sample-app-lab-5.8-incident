@@ -1,0 +1,93 @@
+<div class="row justify-content-center">
+    <div class="col-12">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="ic-bed-heading" jhiTranslate="iconnectSampleAppLabApp.bed.home.createOrEditLabel">Create or edit a Bed</h2>
+
+            <div class="row">
+                <ic-alert-error></ic-alert-error>
+
+                <div class="form group col-6" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.bedReferenceId" for="bedReferenceId">Bed Reference ID</label>
+                    <input type="text" class="form-control" name="bedReferenceId" id="field_bedReferenceId"
+                           formControlName="bedReferenceId"/>
+                    <div *ngIf="editForm.get('bedReferenceId')!.invalid && (editForm.get('bedReferenceId')!.dirty || editForm.get('bedReferenceId')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('bedReferenceId')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.bedName" for="field_bedName">Bed Name</label>
+                    <input type="text" class="form-control" name="bedName" id="field_bedName"
+                           formControlName="bedName"/>
+                    <div *ngIf="editForm.get('bedName')!.invalid && (editForm.get('bedName')!.dirty || editForm.get('bedName')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('bedName')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.wardName" for="field_wardName">Ward Name</label>
+                    <input type="text" class="form-control" name="wardName" id="field_wardName"
+                        formControlName="wardName"/>
+                    <div *ngIf="editForm.get('wardName')!.invalid && (editForm.get('wardName')!.dirty || editForm.get('wardName')!.touched)">
+                        <small class="form-text text-danger"
+                            *ngIf="editForm.get('wardName')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <!-- <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.wardId" for="field_wardId">Ward ID</label>
+                    <input type="number" class="form-control" name="wardId" id="field_wardId"
+                           formControlName="wardId"/>
+                    <div *ngIf="editForm.get('wardId')!.invalid && (editForm.get('wardId')!.dirty || editForm.get('wardId')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('wardId')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.get('wardId')?.errors?.number" jhiTranslate="entity.validation.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div> -->
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.wardAllocationDate" for="field_wardAllocationDate">Ward Allocation Date</label>
+                    <div class="input-group">
+                        <input id="field_wardAllocationDate" type="text" class="form-control" name="wardAllocationDate" ngbDatepicker #wardAllocationDateDp="ngbDatepicker" formControlName="wardAllocationDate"/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="wardAllocationDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div *ngIf="editForm.get('wardAllocationDate')!.invalid && (editForm.get('wardAllocationDate')!.dirty || editForm.get('wardAllocationDate')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('wardAllocationDate')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

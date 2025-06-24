@@ -37,9 +37,9 @@ spring:
   datasource:
     name: IconnectSampleAppLabDS
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/incident?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/assignment1?useUnicode=true&characterEncoding=utf8&allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT%2B8
     username: root
-    password: pass1234
+    password: Longan26!
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -53,13 +53,13 @@ spring:
     database: MYSQL
     show-sql: true
     properties:
-      hibernate.hbm2ddl.auto: none
+      hibernate.hbm2ddl.auto: update
       hibernate.query.substitutions: true 'T', false 'F'
       hibernate.jdbc.batch_size: 30
       hibernate.format_sql: true
       org.hibernate.envers.auditTableSuffix: _AUD
       org.hibernate.envers.revision_field_name: REV
-      org.hibernate.envers.revision_type_field_name: REVTYPE
+      org.hibernate.envers.revision_type_field_name: REV_TYPE
       org.hibernate.envers.do_not_audit_optimistic_locking_field: false
       hibernate.ejb.interceptor: com.ncs.iframe5.data.hibernate.interceptor.IframeTableAuditInterceptor
       hibernate.id.new_generator_mappings: true

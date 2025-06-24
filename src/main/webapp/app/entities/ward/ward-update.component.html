@@ -1,0 +1,76 @@
+<div class="row justify-content-center">
+    <div class="col-12">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="ic-ward-heading" jhiTranslate="iconnectSampleAppLabApp.ward.home.createOrEditLabel">Create or edit a Ward</h2>
+
+            <div class="row">
+                <ic-alert-error></ic-alert-error>
+
+                <div class="form group col-6" [hidden]="!editForm.get('id')!.value">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.ward.wardReferenceId" for="wardReferenceId">Ward Reference ID</label>
+                    <input type="text" class="form-control" name="wardRferenceId" id="field_wardReferenceId"
+                           formControlName="wardReferenceId"/>
+                    <div *ngIf="editForm.get('wardReferenceId')!.invalid && (editForm.get('wardReferenceId')!.dirty || editForm.get('wardReferenceId')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('wardReferenceId')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.ward.wardName" for="field_wardName">wardName</label>
+                    <input type="text" class="form-control" name="wardName" id="field_wardName"
+                           formControlName="wardName"/>
+                    <div *ngIf="editForm.get('wardName')!.invalid && (editForm.get('wardName')!.dirty || editForm.get('wardName')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('wardName')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.ward.wardClassType" for="field_wardClassType">Ward wardClassType</label>
+                    <input type="text" class="form-control" name="wardClassType" id="field_wardClassType"
+                           formControlName="wardClassType"/>
+                    <div *ngIf="editForm.get('wardClassType')!.invalid && (editForm.get('wardClassType')!.dirty || editForm.get('wardClassType')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('wardClassType')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.ward.wardLocation" for="field_wardLocation">Ward Location</label>
+                    <input type="text" class="form-control" name="wardLocation" id="field_wardLocation"
+                           formControlName="wardLocation"/>
+                    <div *ngIf="editForm.get('wardLocation')!.invalid && (editForm.get('wardLocation')!.dirty || editForm.get('wardLocation')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('wardLocation')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

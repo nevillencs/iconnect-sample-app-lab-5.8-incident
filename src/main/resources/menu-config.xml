@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MenuConfig>
    <Menus name="DEFAULT">
+      <Menu id="5" name="5" title="global.menu.management">
+        <Item id="51" name="51" title="global.menu.entities.ward" location="ward" />
+        <Item id="52" name="52" title="global.menu.entities.bed" location="bed" />
+      </Menu>
        <Menu id="6" name="6" title="global.menu.entities.main" iconCSS="th-list">
          <Item id="61" name="61" title="global.menu.entities.incident" location="incident" />
          <Item id="62" name="62" title="global.menu.entities.item" location="item" />

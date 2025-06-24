@@ -1,0 +1,24 @@
+{
+  "iconnectSampleAppLabApp": {
+    "ward": {
+      "home": {
+        "title": "Manage Ward",
+        "createLabel": "Add Ward",
+        "createOrEditLabel": "Create or edit a Ward"
+      },
+      "created": "A new Ward is created with identifier {{ param }}",
+      "updated": "A Ward is updated with identifier {{ param }}",
+      "deleted": "A Ward is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Ward {{ id }}?"
+      },
+      "detail": {
+        "title": "Ward"
+      },
+      "wardReferenceId": "Ward Reference ID",
+      "wardName": "Ward Name",
+      "wardClassType": "Ward Class Type",
+      "wardLocation": "Ward Location"
+    }
+  }
+}
