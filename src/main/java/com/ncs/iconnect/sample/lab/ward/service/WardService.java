@@ -1,5 +1,6 @@
 package com.ncs.iconnect.sample.lab.ward.service;
 
+import com.ncs.iconnect.sample.lab.ward.domain.WardDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ncs.iconnect.sample.lab.ward.domain.Ward;
@@ -25,8 +26,18 @@ public class WardService implements WardServiceInterface{
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Ward> findAll(Pageable pageable) {
-        return wardRepository.findAll(pageable);
+    public Page<WardDTO> findAll(Pageable pageable) {
+        Page<Ward> wards = wardRepository.findAll(pageable);
+        return wards.map(ward -> {
+            WardDTO dto = new WardDTO();
+            dto.setId(ward.getId());
+            dto.setWardReferenceId(ward.getWardReferenceId());
+            dto.setWardName(ward.getWardName());
+            dto.setWardClassType(ward.getWardClassType());
+            dto.setWardLocation(ward.getWardLocation());
+            dto.setBeds(ward.getBeds());
+            return dto;
+        });
     }
     @Override
     public Page<Ward> search(String wardName, Pageable page) {

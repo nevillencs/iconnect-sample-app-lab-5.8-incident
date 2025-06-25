@@ -1,5 +1,6 @@
 package com.ncs.iconnect.sample.lab.ward.web.rest;
 import com.ncs.iconnect.sample.lab.ward.domain.Ward;
+import com.ncs.iconnect.sample.lab.ward.domain.WardDTO;
 import com.ncs.iconnect.sample.lab.ward.service.WardService;
 import com.ncs.iconnect.sample.lab.generated.web.rest.util.HeaderUtil;
 import com.ncs.iconnect.sample.lab.generated.web.rest.util.PaginationUtil;
@@ -80,10 +81,6 @@ public class WardResource {
         if (ward.getId() == null) {
             return createWard(ward);
         }
-//        Ward result = wardService.update(ward);
-//        return ResponseEntity.ok()
-//            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ward.getId().toString()))
-//            .body(result);
         try {
             Ward result = wardService.update(ward);
             return ResponseEntity.ok()
@@ -103,9 +100,9 @@ public class WardResource {
      * @return the ResponseEntity with status 200 (OK) and the list of wards in body
      */
     @GetMapping("/wards")
-    public ResponseEntity<List<Ward>> getAllWards(@ApiParam Pageable pageable) {
+    public ResponseEntity<List<WardDTO>> getAllWards(@ApiParam Pageable pageable) {
         log.debug("REST request to get a page of Wards");
-        Page<Ward> page = wardService.findAll(pageable);
+        Page<WardDTO> page = wardService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/wards");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

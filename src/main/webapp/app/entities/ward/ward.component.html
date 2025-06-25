@@ -30,6 +30,7 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.sn">S/N</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="wardReferenceId"><span jhiTranslate="iconnectSampleAppLabApp.ward.wardReferenceId">Ward Reference ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
             <th jhiSortBy="wardName"><span jhiTranslate="iconnectSampleAppLabApp.ward.wardName">Ward Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th><span>No. of Beds</span></th>
             <th></th>
             </tr>
             </thead>
@@ -38,6 +39,9 @@
                 <td><a [routerLink]="['/ward', ward.id, 'view' ]">{{ward.id}}</a></td>
                 <td>{{ward.wardReferenceId}}</td>
                 <td>{{ward.wardName}}</td>
+                <td>
+                {{ ward.beds?.length || 0 }}
+                </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

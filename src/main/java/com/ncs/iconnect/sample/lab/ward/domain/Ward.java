@@ -1,10 +1,13 @@
 package com.ncs.iconnect.sample.lab.ward.domain;
+import com.ncs.iconnect.sample.lab.bed.domain.Bed;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +27,8 @@ public class Ward {
     private String wardClassType;
     @Column(name="WARD_LOCATION")
     private String wardLocation;
+    @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private java.util.List<Bed> beds = new java.util.ArrayList<>();
 
     public Long getId() {
         return id;
@@ -65,6 +70,13 @@ public class Ward {
         this.wardLocation = wardLocation;
     }
 
+    public List<Bed> getBeds() {
+        return beds;
+    }
+
+    public void setBeds(List<Bed> beds) {
+        this.beds = beds;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {

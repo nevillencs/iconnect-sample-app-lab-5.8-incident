@@ -1,9 +1,12 @@
+import { IBed } from './bed.model';
+
 export interface IWard {
   id?: number;
   wardReferenceId?: string;
   wardName?: string;
   wardClassType?: string;
   wardLocation?: string;
+  beds?: IBed[];
 }
 
 export class Ward implements IWard {
@@ -12,6 +15,7 @@ export class Ward implements IWard {
     public wardReferenceId?: string,
     public wardName?: string,
     public wardClassType?: string,
-    public wardLocation?: string
+    public wardLocation?: string,
+    public beds?: IBed[]
   ) {}
 }

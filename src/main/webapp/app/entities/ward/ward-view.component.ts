@@ -20,6 +20,7 @@ export class WardViewComponent implements OnInit {
   wardDateDp: any;
   wardClassTypes: string[] = ['A', 'B', 'C'];
   wardLocations: string[] = ['A1', 'A2', 'B1', 'B2'];
+  numberOfBeds = 0;
   editForm = this.fb.group({
     id: [],
     wardReferenceId: [null, [Validators.required, Validators.pattern(/^WARD_\d{2}$/)]],
@@ -33,6 +34,7 @@ export class WardViewComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ ward }) => {
       this.updateForm(ward);
+      this.numberOfBeds = ward.beds ? ward.beds.length : 0;
     });
   }
 
