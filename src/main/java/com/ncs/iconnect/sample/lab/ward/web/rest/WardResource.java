@@ -15,12 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 /**
  * REST controller for managing Ward.
@@ -52,10 +53,16 @@ public class WardResource {
         if (ward.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new ward cannot already have an ID")).body(null);
         }
-        Ward result = wardService.add(ward);
-        return ResponseEntity.created(new URI("/api/wards/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        try {
+            Ward result = wardService.add(ward);
+            return ResponseEntity.created(new URI("/api/wards/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } catch (EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", "Ward Reference ID in use"))
+                .body(null);
+        }
     }
 
     /**
@@ -73,10 +80,20 @@ public class WardResource {
         if (ward.getId() == null) {
             return createWard(ward);
         }
-        Ward result = wardService.update(ward);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ward.getId().toString()))
-            .body(result);
+//        Ward result = wardService.update(ward);
+//        return ResponseEntity.ok()
+//            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ward.getId().toString()))
+//            .body(result);
+        try {
+            Ward result = wardService.update(ward);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ward.getId().toString()))
+                .body(result);
+        } catch (EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", "Ward Reference ID in use"))
+                .body(null);
+        }
     }
 
     /**

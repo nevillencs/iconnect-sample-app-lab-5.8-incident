@@ -4,9 +4,12 @@
       "home": {
         "title": "Manage Ward",
         "createLabel": "Add Ward",
+        "view": "View Ward",
+        "edit": "Edit Ward",
+        "delete": "Delete Ward",
         "createOrEditLabel": "Create or edit a Ward"
       },
-      "created": "A new Ward is created with identifier {{ param }}",
+      "created": "Ward details added successfully",
       "updated": "A Ward is updated with identifier {{ param }}",
       "deleted": "A Ward is deleted with identifier {{ param }}",
       "delete": {

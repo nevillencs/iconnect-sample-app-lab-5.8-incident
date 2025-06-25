@@ -98,6 +98,7 @@
   },
   "entity": {
     "action": {
+      "add": "Add",
       "addblob": "增加 BLOB",
       "addimage": "增加图片",
       "back": "返回",
@@ -132,11 +133,13 @@
     "internalServerError": "Internal server error",
     "server.not.reachable": "服务器无法访问",
     "url.not.found": "Not found",
+    "conflict": "Field in use",
     "NotNull": "域 {{fieldName}} 不能为空!",
     "Size": "域 {{fieldName}} 不满足最大/最小值限制!",
     "userexists": "该用户名已存在!",
     "emailexists": "该邮箱已被使用!",
     "idexists": "新建的 {{entityName}} 不能包含ID",
+    "entityexists": "{{ entityName }} in use",
     "idnull": "Invalid ID",
     "file": {
       "could.not.extract": "Could not extract file",

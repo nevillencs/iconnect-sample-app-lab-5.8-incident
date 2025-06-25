@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.EntityExistsException;
 
 @Service
 @Transactional
@@ -39,6 +40,12 @@ public class WardService implements WardServiceInterface{
         else if (entity.getWardName() == null) {
             return null;
         }
+        if (wardRepository.findByWardReferenceId(entity.getWardReferenceId()).isPresent()) {
+            throw new EntityExistsException("Ward Reference ID in use");
+        }
+        else if (wardRepository.findByWardName(entity.getWardName()).isPresent()) {
+            throw new EntityExistsException("Ward Name in use");
+        }
         return wardRepository.save(entity);
     }
     @Override
@@ -58,6 +65,9 @@ public class WardService implements WardServiceInterface{
         }
         else if (entity.getWardName() == null) {
             return null;
+        }
+        if (wardRepository.findByWardReferenceId(entity.getWardReferenceId()).isPresent()) {
+            throw new EntityExistsException("Ward Reference ID in use");
         }
         return wardRepository.save(entity);
     }

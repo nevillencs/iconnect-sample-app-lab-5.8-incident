@@ -1,0 +1,17 @@
+<div class="modal-header">
+  <h2 id="ic-ward-heading" jhiTranslate="iconnectSampleAppLabApp.ward.home.delete">Delete Ward</h2>
+  <!-- <h4 class="modal-title" id="deleteWardLabel">Confirm delete operation</h4> -->
+  <!-- <button type="button" class="close" aria-label="Close" (click)="cancel()">
+    <span aria-hidden="true">&times;</span>
+  </button> -->
+</div>
+<div>
+  <p>
+    All beds allocated to this ward will be deleted as well. Proceed 
+to remove?
+  </p>
+</div>
+<div>
+  <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+  <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+</div>

@@ -9,8 +9,13 @@ import { map } from 'rxjs/operators';
 import { Ward } from 'app/shared/model/ward.model';
 import { WardService } from './ward.service';
 import { WardUpdateComponent } from './ward-update.component';
+import { WardViewComponent } from './ward-view.component';
+import { WardEditComponent } from './ward-edit.component';
+import { WardDeleteDialogComponent } from './ward-delete-dialog.component';
 import { WardComponent } from './ward.component';
 import { IWard } from 'app/shared/model/ward.model';
+import { Code } from 'app/admin/code-admin/code/code.model';
+import { CodePopupService } from 'app/admin/code-admin/code';
 
 @Injectable({ providedIn: 'root' })
 export class WardResolve implements Resolve<IWard> {
@@ -53,7 +58,7 @@ export const wardRoute: Routes = [
   },
   {
     path: ':id/edit',
-    component: WardUpdateComponent,
+    component: WardEditComponent,
     resolve: {
       ward: WardResolve
     },
@@ -65,7 +70,7 @@ export const wardRoute: Routes = [
   },
   {
     path: ':id/view',
-    component: WardUpdateComponent,
+    component: WardViewComponent,
     resolve: {
       ward: WardResolve
     },
@@ -73,6 +78,19 @@ export const wardRoute: Routes = [
       authorities: [Authority.USER],
       pageTitle: 'iconnectSampleAppLabApp.ward.home.title'
     },
+    canActivate: [UserRouteAccessService]
+  },
+  {
+    path: ':id/delete',
+    component: WardDeleteDialogComponent,
+    resolve: {
+      ward: WardResolve
+    },
+    data: {
+      authorities: [Authority.USER],
+      pageTitle: 'iconnectSampleAppLabApp.ward.home.title'
+    },
+    // outlet: 'popup',
     canActivate: [UserRouteAccessService]
   }
 ];

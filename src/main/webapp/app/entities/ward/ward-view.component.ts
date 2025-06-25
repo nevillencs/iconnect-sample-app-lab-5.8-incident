@@ -11,10 +11,10 @@ import { WardService } from './ward.service';
 type SelectableEntity = IWard;
 
 @Component({
-  selector: 'ic-ward-update',
-  templateUrl: './ward-update.component.html'
+  selector: 'ic-ward-view',
+  templateUrl: './ward-view.component.html'
 })
-export class WardUpdateComponent implements OnInit {
+export class WardViewComponent implements OnInit {
   private ward: IWard;
   isSaving: Boolean;
   wardDateDp: any;

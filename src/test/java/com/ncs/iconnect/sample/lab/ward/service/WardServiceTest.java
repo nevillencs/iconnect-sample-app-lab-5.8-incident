@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+import com.ncs.iconnect.sample.lab.ward.domain.WardDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ public class WardServiceTest {
     public void testFindAllCallsRepository(){
         Pageable page = PageRequest.of(0, 10);
         when(wardRepository.findAll(page)).thenReturn(prepareSearchResults(page));
-        Page<Ward> searchResults = wardService.findAll(page);
+        Page<WardDTO> searchResults = wardService.findAll(page);
         verify(wardRepository, times(1)).findAll(page);
     }
 

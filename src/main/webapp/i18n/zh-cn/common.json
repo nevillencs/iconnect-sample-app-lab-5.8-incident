@@ -6,6 +6,8 @@
     "404": "404 Not Found!",
     "404PageContent": "We couldn't find what you're looking for on ",
 
+    "409": "409 Conflict",
+
     "500": "500 Internal Server Error",
     "500PageContent": "The web server is returning an internal error for ",
 
