@@ -1,10 +1,38 @@
+CREATE TABLE CLASS_TYPE (
+  code CHAR(1) PRIMARY KEY,
+  code_description VARCHAR(20),
+  code_sequence INT
+);
+
+INSERT INTO CLASS_TYPE (code, code_description, code_sequence)
+VALUES
+  ('A', 'Class A', 1),
+  ('B', 'Class B', 2),
+  ('C', 'Class C', 3);
+
+CREATE TABLE LOCATION (
+  code CHAR(2) PRIMARY KEY,
+  code_description VARCHAR(20),
+  code_sequence INT
+);
+
+INSERT INTO LOCATION (code, code_description, code_sequence)
+VALUES
+  ('A1', 'Block A Level 1', 1),
+  ('A2', 'Block A Level 2', 2),
+  ('B1', 'Block B Level 1', 3),
+  ('B2', 'Block B Level 2', 4);
+
 CREATE TABLE TBL_WARD (
     ID BIGINT AUTO_INCREMENT PRIMARY KEY,
     WARD_REFERENCE_ID VARCHAR(7) NOT NULL UNIQUE,
     WARD_NAME VARCHAR(10) NOT NULL UNIQUE,
-    WARD_CLASS_TYPE VARCHAR(20),
-    WARD_LOCATION VARCHAR(20)
+    WARD_CLASS_TYPE CHAR(1),
+    WARD_LOCATION CHAR(2),
+    FOREIGN KEY (WARD_CLASS_TYPE) REFERENCES CLASS_TYPE(code),
+    FOREIGN KEY (WARD_LOCATION) REFERENCES LOCATION(code)
 );
+
 CREATE TABLE TBL_BED (
     ID BIGINT AUTO_INCREMENT PRIMARY KEY,
     BED_REFERENCE_ID VARCHAR(6) NOT NULL,
@@ -16,9 +44,9 @@ CREATE TABLE TBL_BED (
 
 -- Insert dummy data into TBL_WARD
 INSERT INTO TBL_WARD (WARD_REFERENCE_ID, WARD_NAME, WARD_CLASS_TYPE, WARD_LOCATION) VALUES
-('WRD001', 'Alpha', 'General', 'East Wing'),
-('WRD002', 'Bravo', 'ICU', 'West Wing'),
-('WRD003', 'Charlie', 'Pediatric', 'North Wing');
+('WRD001', 'Alpha', 'A', 'A1'),
+('WRD002', 'Bravo', 'B', 'A1'),
+('WRD003', 'Charlie', 'C', 'North Wing');
 
 -- Insert dummy data into TBL_BED
 INSERT INTO TBL_BED (BED_REFERENCE_ID, BED_NAME, WARD_ID, WARD_ALLOCATION_DATE) VALUES

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 import com.ncs.iconnect.sample.lab.ward.domain.Ward;
+import com.ncs.iconnect.sample.lab.ward.repository.WardRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,10 +23,11 @@ public class BedServiceTest {
 
     BedService bedService;
     BedRepository bedRepository = mock(BedRepository.class);
+    WardRepository wardRepository = mock(WardRepository.class);
 
     @BeforeEach
     public void init() {
-        bedService = new BedService(bedRepository);
+        bedService = new BedService(bedRepository, wardRepository);
     }
 
     @Test
