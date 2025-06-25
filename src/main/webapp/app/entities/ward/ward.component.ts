@@ -29,6 +29,8 @@ export class WardComponent implements OnInit, OnDestroy {
   predicate: any;
   previousPage: any;
   reverse: any;
+  searchWardName = '';
+  filteredWards: IWard[] = [];
 
   constructor(
     private wardService: WardService,
@@ -55,9 +57,21 @@ export class WardComponent implements OnInit, OnDestroy {
         sort: this.sort()
       })
       .subscribe(
-        (res: HttpResponse<IWard[]>) => this.paginateWards(res.body, res.headers),
+        (res: HttpResponse<IWard[]>) => {
+          this.paginateWards(res.body, res.headers);
+          this.filterWards();
+        },
         (res: HttpErrorResponse) => this.onError(res.message)
       );
+  }
+
+  filterWards(): void {
+    if (!this.searchWardName) {
+      this.filteredWards = this.wards;
+    } else {
+      const query = this.searchWardName.toLowerCase();
+      this.filteredWards = this.wards.filter(ward => ward.wardName && ward.wardName.toLowerCase().includes(query));
+    }
   }
 
   loadPage(page: number): void {
@@ -120,6 +134,7 @@ export class WardComponent implements OnInit, OnDestroy {
     this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
     this.queryCount = this.totalItems;
     this.wards = data;
+    this.filterWards();
   }
 
   private onError(errorMessage: string): void {
