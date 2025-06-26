@@ -1,5 +1,7 @@
 package com.ncs.iconnect.sample.lab.bed.web.rest;
 import com.ncs.iconnect.sample.lab.bed.domain.Bed;
+import com.ncs.iconnect.sample.lab.bed.domain.BedDTO;
+import com.ncs.iconnect.sample.lab.bed.domain.CreateBedDTO;
 import com.ncs.iconnect.sample.lab.bed.service.BedService;
 import com.ncs.iconnect.sample.lab.generated.web.rest.util.HeaderUtil;
 import com.ncs.iconnect.sample.lab.generated.web.rest.util.PaginationUtil;
@@ -40,6 +42,37 @@ public class BedResource {
     }
 
     /**
+     * GET  /beds : get all the beds.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of beds in body
+     */
+    @GetMapping("/beds")
+    public ResponseEntity<List<BedDTO>> getAllBeds(@ApiParam Pageable pageable) {
+        log.debug("REST request to get a page of Beds");
+        Page<BedDTO> page = bedService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/beds");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /beds/:id : get the "id" bed.
+     *
+     * @param id the id of the bed to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the bed, or with status 404 (Not Found)
+     */
+    @GetMapping("/beds/{id}")
+    public ResponseEntity<BedDTO> getBed(@PathVariable Long id) {
+        log.debug("REST request to get Bed : {}", id);
+        try {
+            BedDTO bed = bedService.find(id);
+            return ResponseEntity.ok(bed);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
      * POST  /beds : Create a new bed.
      *
      * @param bed the bed to create
@@ -47,12 +80,9 @@ public class BedResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/beds")
-    public ResponseEntity<Bed> createBed(@Valid @RequestBody Bed bed) throws URISyntaxException {
+    public ResponseEntity<BedDTO> createBed(@Valid @RequestBody CreateBedDTO bed) throws URISyntaxException {
         log.debug("REST request to save Bed : {}", bed);
-        if (bed.getId() != null) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new bed cannot already have an ID")).body(null);
-        }
-        Bed result = bedService.add(bed);
+        BedDTO result = bedService.add(bed);
         return ResponseEntity.created(new URI("/api/beds/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -68,46 +98,15 @@ public class BedResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/beds")
-    public ResponseEntity<Bed> updateBed(@Valid @RequestBody Bed bed) throws URISyntaxException {
+    public ResponseEntity<BedDTO> updateBed(@Valid @RequestBody CreateBedDTO bed) throws URISyntaxException {
         log.debug("REST request to update Bed : {}", bed);
-        if (bed.getId() == null) {
+        if (bed.getBedReferenceId() == null) {
             return createBed(bed);
         }
-        Bed result = bedService.update(bed);
+        BedDTO result = bedService.update(bed);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, bed.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
-    }
-
-    /**
-     * GET  /beds : get all the beds.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of beds in body
-     */
-    @GetMapping("/beds")
-    public ResponseEntity<List<Bed>> getAllBeds(@ApiParam Pageable pageable) {
-        log.debug("REST request to get a page of Beds");
-        Page<Bed> page = bedService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/beds");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-
-    /**
-     * GET  /beds/:id : get the "id" bed.
-     *
-     * @param id the id of the bed to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the bed, or with status 404 (Not Found)
-     */
-    @GetMapping("/beds/{id}")
-    public ResponseEntity<Bed> getBed(@PathVariable Long id) {
-        log.debug("REST request to get Bed : {}", id);
-        try {
-            Bed bed = bedService.find(id);
-            return ResponseEntity.ok(bed);
-        } catch (EntityNotFoundException ex) {
-            return ResponseEntity.notFound().build();
-        }
     }
 
     /**
@@ -124,9 +123,9 @@ public class BedResource {
     }
 
     @GetMapping("/beds/search")
-    public ResponseEntity<List<Bed>> searchBeds(@RequestParam String query, @ApiParam Pageable pageable) {
+    public ResponseEntity<List<BedDTO>> searchBeds(@RequestParam String query, @ApiParam Pageable pageable) {
         log.debug("REST request to search for a page of Beds for query {}", query);
-        Page<Bed> page = bedService.search(query, pageable);
+        Page<BedDTO> page = bedService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/beds/search");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

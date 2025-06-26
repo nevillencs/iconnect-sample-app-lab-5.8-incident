@@ -41,7 +41,7 @@ public class WardServiceTest {
         Pageable page = PageRequest.of(0, 10);
         String wardNameQuery = "Alp";
         when(wardRepository.findByWardName(wardNameQuery, page)).thenReturn(prepareSearchResults(page));
-        Page<Ward> searchResults = wardService.search(wardNameQuery, page);
+        Page<WardDTO> searchResults = wardService.search(wardNameQuery, page);
         verify(wardRepository, times(1)).findByWardName(wardNameQuery, page);
     }
 

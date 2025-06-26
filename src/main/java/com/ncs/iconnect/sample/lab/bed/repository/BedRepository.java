@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.ncs.iconnect.sample.lab.bed.domain.Bed;
 
+import java.util.Optional;
+
 /**
  * Spring Data JPA repository for the Ward entity.
  */
@@ -17,4 +19,6 @@ import com.ncs.iconnect.sample.lab.bed.domain.Bed;
 public interface BedRepository extends JpaRepository<Bed, Long> {
     @Query("FROM Bed t  WHERE " + "LOWER(t.bedName) LIKE LOWER(CONCAT('%',:bedName, '%'))")
     public Page<Bed> findByBedName(@Param("bedName") String bedName, Pageable page);
+    Optional<Bed> findByBedReferenceId(String bedReferenceId);
+    Optional<Bed> findByBedName(String bedName);
 }

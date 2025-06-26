@@ -1,5 +1,5 @@
 package com.ncs.iconnect.sample.lab.ward.domain;
-import com.ncs.iconnect.sample.lab.bed.domain.Bed;
+import com.ncs.iconnect.sample.lab.bed.domain.BedDTO;
 import java.util.List;
 
 public class WardDTO {
@@ -8,7 +8,7 @@ public class WardDTO {
     private String wardName;
     private String wardClassType;
     private String wardLocation;
-    private List<Bed> beds;
+    private List<BedDTO> beds;
 
     // Getters and setters
     public Long getId() { return id; }
@@ -26,6 +26,6 @@ public class WardDTO {
     public String getWardLocation() { return wardLocation; }
     public void setWardLocation(String wardLocation) { this.wardLocation = wardLocation; }
 
-    public List<Bed> getBeds() { return beds; }
-    public void setBeds(List<Bed> beds) { this.beds = beds; }
+    public List<BedDTO> getBeds() { return beds; }
+    public void setBeds(List<BedDTO> beds) { this.beds = beds; }
 }

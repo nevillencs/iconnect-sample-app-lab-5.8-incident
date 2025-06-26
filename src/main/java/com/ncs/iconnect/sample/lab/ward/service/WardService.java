@@ -1,5 +1,7 @@
 package com.ncs.iconnect.sample.lab.ward.service;
 
+import com.ncs.iconnect.sample.lab.bed.domain.Bed;
+import com.ncs.iconnect.sample.lab.bed.domain.BedDTO;
 import com.ncs.iconnect.sample.lab.ward.domain.WardDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import com.ncs.iconnect.sample.lab.ward.repository.WardRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
+import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityExistsException;
 
@@ -28,20 +31,12 @@ public class WardService implements WardServiceInterface{
     @Transactional(readOnly = true)
     public Page<WardDTO> findAll(Pageable pageable) {
         Page<Ward> wards = wardRepository.findAll(pageable);
-        return wards.map(ward -> {
-            WardDTO dto = new WardDTO();
-            dto.setId(ward.getId());
-            dto.setWardReferenceId(ward.getWardReferenceId());
-            dto.setWardName(ward.getWardName());
-            dto.setWardClassType(ward.getWardClassType());
-            dto.setWardLocation(ward.getWardLocation());
-            dto.setBeds(ward.getBeds());
-            return dto;
-        });
+        return wards.map(this::toDto);
     }
     @Override
-    public Page<Ward> search(String wardName, Pageable page) {
-        return wardRepository.findByWardName(wardName, page);
+    public Page<WardDTO> search(String wardName, Pageable pageable) {
+        Page<Ward> wards = wardRepository.findByWardName(wardName, pageable);
+        return wards.map(this::toDto);
     }
     @Override
     public Ward add(Ward entity) {
@@ -89,5 +84,30 @@ public class WardService implements WardServiceInterface{
         if (ward != null) {
             wardRepository.delete(ward);
         }
+    }
+    private BedDTO toBedDto(Bed bed) {
+        BedDTO bedDto = new BedDTO();
+        bedDto.setId(bed.getId());
+        bedDto.setBedReferenceId(bed.getBedReferenceId());
+        bedDto.setBedName(bed.getBedName());
+        bedDto.setWardAllocationDate(bed.getWardAllocationDate());
+
+        bedDto.setWardName(bed.getWard().getWardName());
+        bedDto.setWardClassType(bed.getWard().getWardClassType());
+        bedDto.setWardLocation(bed.getWard().getWardLocation());
+        return bedDto;
+    }
+    private WardDTO toDto(Ward ward) {
+        WardDTO dto = new WardDTO();
+        dto.setId(ward.getId());
+        dto.setWardReferenceId(ward.getWardReferenceId());
+        dto.setWardName(ward.getWardName());
+        dto.setWardClassType(ward.getWardClassType());
+        dto.setWardLocation(ward.getWardLocation());
+        List<BedDTO> bedDTOs = ward.getBeds().stream()
+            .map(this::toBedDto)
+            .collect(java.util.stream.Collectors.toList());
+        dto.setBeds(bedDTOs);
+        return dto;
     }
 }

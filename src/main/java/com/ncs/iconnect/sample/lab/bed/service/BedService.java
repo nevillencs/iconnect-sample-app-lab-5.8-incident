@@ -1,17 +1,21 @@
 package com.ncs.iconnect.sample.lab.bed.service;
+import com.ncs.iconnect.sample.lab.bed.domain.CreateBedDTO;
 import com.ncs.iconnect.sample.lab.bed.repository.BedRepository;
 import com.ncs.iconnect.sample.lab.ward.repository.WardRepository;
 import com.ncs.iconnect.sample.lab.bed.service.BedService;
 import com.ncs.iconnect.sample.lab.ward.domain.Ward;
+import com.ncs.iconnect.sample.lab.ward.domain.WardDTO;
+import org.checkerframework.checker.nullness.Opt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.ncs.iconnect.sample.lab.bed.domain.Bed;
-import org.springframework.security.core.parameters.P;
+import com.ncs.iconnect.sample.lab.bed.domain.BedDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
@@ -29,56 +33,111 @@ public class BedService implements BedServiceInterface {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Bed> findAll(Pageable pageable) {
-        return bedRepository.findAll(pageable);
+    public Page<BedDTO> findAll(Pageable pageable) {
+        return bedRepository.findAll(pageable).map(this::toDto);
     }
 
     @Override
-    public Page<Bed> search(String bedName, Pageable page) {
-        return bedRepository.findByBedName(bedName, page);
+    public Page<BedDTO> search(String bedName, Pageable pageable) {
+        return bedRepository.findByBedName(bedName, pageable).map(this::toDto);
     }
 
     @Override
-    public Bed add(Bed entity) {
-        if (entity.getBedReferenceId() == null) {
-            return null;
+    public BedDTO add(CreateBedDTO bedDto) {
+        Optional<Ward> ward = wardRepository.findByWardName(bedDto.getWardName());
+        if (!ward.isPresent()) {
+            throw new EntityNotFoundException("Ward not found. Check upstream ward names validation.");
         }
-        else if (entity.getBedName() == null) {
-            return null;
+        if (bedRepository.findByBedReferenceId(bedDto.getBedReferenceId()).isPresent()) {
+            throw new EntityExistsException(String.format(
+                "Bed Reference ID in use for '%s' '%s'",
+                ward.get().getWardReferenceId(),
+                ward.get().getWardName()));
         }
-        Ward ward = entity.getWard();
-        if (ward == null) {
-            throw new EntityNotFoundException("Ward does not exist.");
+        else if (bedRepository.findByBedName(bedDto.getBedName()).isPresent()) {
+            throw new EntityExistsException(String.format(
+                "Bed Name in use for '%s' '%s'",
+                ward.get().getWardReferenceId(),
+                ward.get().getWardName()));
         }
-        return bedRepository.save(entity);
+        Bed entity = toEntity(bedDto);
+        return toDto(bedRepository.save(entity));
+    }
+
+    @Override
+    public BedDTO update(CreateBedDTO bedDto) {
+        Ward ward = wardRepository.findByWardName(bedDto.getWardName())
+            .orElseThrow(() -> new EntityNotFoundException("Ward not found. Check upstream ward names validation."));
+        Bed oldBed = bedRepository.findByBedReferenceId(bedDto.getBedReferenceId())
+            .orElseThrow(() -> new EntityNotFoundException("Old bed doesn't exist"));
+
+        if (bedRepository.findByBedReferenceId(bedDto.getBedReferenceId())
+            .filter(b -> !b.getId().equals(oldBed.getId()))
+            .isPresent()) {
+            throw new EntityExistsException(String.format(
+                "Bed Reference ID in use for '%s' '%s'",
+                ward.getWardReferenceId(),
+                ward.getWardName()));
+        }
+        else if (bedRepository.findByBedName(bedDto.getBedName())
+            .filter(b -> !b.getId().equals(oldBed.getId()))
+            .isPresent()) {
+            throw new EntityExistsException(String.format(
+                "Bed Name in use for '%s' '%s'",
+                ward.getWardReferenceId(),
+                ward.getWardName()));
+        }
+        oldBed.setBedName(bedDto.getBedName());
+        oldBed.setWardAllocationDate(bedDto.getWardAllocationDate());
+        oldBed.setWard(ward);
+        return toDto(bedRepository.save(oldBed));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Bed find(Long id) {
+    public BedDTO find(Long id) {
         Optional<Bed> bed = bedRepository.findById(id);
         if (bed.isPresent()) {
-            return bed.get();
+            return toDto(bed.get());
         } else {
             throw new EntityNotFoundException("Bed not found with id: " + id);
         }
     }
-    @Override
-    public Bed update(Bed entity) {
-        if (entity.getBedReferenceId() == null) {
-            return null;
-        }
-        else if (entity.getBedName() == null) {
-            return null;
-        }
-        return bedRepository.save(entity);
-    }
 
     @Override
+    @Transactional
     public void delete(Long id) {
-        Bed bed = bedRepository.getOne(id);
-        if (bed != null) {
-            bedRepository.delete(bed);
+        Bed bed = bedRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException(String.format("Bed with ID %s does not exist", id)));
+        Ward ward = bed.getWard();
+        if (ward != null) {
+            ward.getBeds().remove(bed);
         }
+        bedRepository.delete(bed);
+    }
+
+    private BedDTO toDto(Bed bed) {
+        BedDTO dto = new BedDTO();
+        dto.setId(bed.getId());
+        dto.setBedReferenceId(bed.getBedReferenceId());
+        dto.setBedName(bed.getBedName());
+        dto.setWardAllocationDate(bed.getWardAllocationDate());
+        if (bed.getWard() != null) {
+            dto.setWardName(bed.getWard().getWardName());
+            dto.setWardClassType(bed.getWard().getWardClassType());
+            dto.setWardLocation(bed.getWard().getWardLocation());
+        }
+        return dto;
+    }
+    private Bed toEntity(CreateBedDTO dto) {
+        Bed bed = new Bed();
+        bed.setBedReferenceId(dto.getBedReferenceId());
+        bed.setBedName(dto.getBedName());
+        bed.setWardAllocationDate(dto.getWardAllocationDate());
+        if (dto.getWardName() != null) {
+            Optional<Ward> wardOpt = wardRepository.findByWardName(dto.getWardName());
+            wardOpt.ifPresent(bed::setWard);
+        }
+        return bed;
     }
 }

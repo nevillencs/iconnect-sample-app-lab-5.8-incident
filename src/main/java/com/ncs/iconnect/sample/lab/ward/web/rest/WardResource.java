@@ -138,9 +138,9 @@ public class WardResource {
     }
 
     @GetMapping("/wards/search")
-    public ResponseEntity<List<Ward>> searchWards(@RequestParam String query, @ApiParam Pageable pageable) {
+    public ResponseEntity<List<WardDTO>> searchWards(@RequestParam String query, @ApiParam Pageable pageable) {
         log.debug("REST request to search for a page of Wards for query {}", query);
-        Page<Ward> page = wardService.search(query, pageable);
+        Page<WardDTO> page = wardService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/wards/search");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
