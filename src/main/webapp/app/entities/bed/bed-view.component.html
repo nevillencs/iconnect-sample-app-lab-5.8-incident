@@ -1,0 +1,57 @@
+<div class="row justify-content-center">
+    <div class="col-12">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="ic-bed-heading" jhiTranslate="iconnectSampleAppLabApp.bed.home.view">View Bed</h2>
+
+            <div class="row">
+                <ic-alert-error></ic-alert-error>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.bedReferenceId" for="bedReferenceId">Bed Reference ID</label>
+                    <input type="text" class="form-control" name="bedReferenceId" id="field_bedReferenceId"
+                           formControlName="bedReferenceId" readonly/>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.bedName" for="field_bedName">Bed Name</label>
+                    <input type="text" class="form-control" name="bedName" id="field_bedName"
+                           formControlName="bedName" maxlength="10" readonly/>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.wardName" for="field_wardName">Ward Name</label>
+                    <input type="text" class="form-control" name="wardName" id="field_wardName"
+                           formControlName="wardName" maxlength="10" readonly/>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.ward.wardClassType" for="field_wardClassType">Ward Class Type</label>
+                    <input type="text" class="form-control" name="wardClassType" id="field_wardClassType"
+                           formControlName="wardClassType" readonly/>
+                </div>
+
+                <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.ward.wardLocation" for="field_wardLocation">Ward Location</label>
+                    <input type="text" class="form-control" name="wardLocation" id="field_wardLocation"
+                            formControlName="wardLocation" readonly/>
+                </div>
+
+               <div class="form-group col-6">
+                    <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.wardAllocationDate" for="field_wardAllocationDate">Ward Allocation Date</label>
+                        <span class="form-control" id="field_wardAllocationDate">
+                            {{ editForm.get('wardAllocationDate')?.value | date:'dd-MM-yyyy' }}
+                        </span>
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+

@@ -5,7 +5,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { IBed, Bed, IUpdateBedDTO, UpdateBedDTO } from 'app/shared/model/bed.model';
+import { IBed, IUpdateBedDTO } from 'app/shared/model/bed.model';
 import { IWard } from 'app/shared/model/ward.model';
 import { BedService } from './bed.service';
 import { WardService } from '../ward/ward.service';
@@ -13,23 +13,20 @@ import { WardService } from '../ward/ward.service';
 type SelectableEntity = IBed;
 
 @Component({
-    selector: 'ic-bed-update',
-    templateUrl: './bed-update.component.html'
+    selector: 'ic-bed-edit',
+    templateUrl: './bed-edit.component.html'
 })
-export class BedUpdateComponent implements OnInit {
+export class BedEditComponent implements OnInit {
     private bed: IBed;
     isSaving: Boolean;
     bedDateDp: any;
     wardNames: string[] = [];
 
     editForm = this.fb.group({
-        // id: [],
         bedReferenceId: [null, [Validators.required, Validators.pattern(/^BED_\d{2}$/)]],
         bedName: [null, []],
         wardName: [null, [Validators.required]],
         wardAllocationDate: [null, [Validators.required]]
-        // wardAllocationDate: [{ year: 2024, month: 6, day: 15 }, [Validators.required]]
-        // wardAllocationDate: ['2025-06-14', [Validators.required]]
     });
 
     constructor(
@@ -47,12 +44,10 @@ export class BedUpdateComponent implements OnInit {
             const wards: IWard[] = response.body || [];
             this.wardNames = wards.map(ward => ward.wardName).sort((a, b) => a.localeCompare(b));
         });
-        // this.editForm.get('wardAllocationDate').setValue({ year: 2024, month: 6, day: 15 });
     }
 
     updateForm(bed: IUpdateBedDTO): void {
         this.editForm.patchValue({
-            // id: bed.id,
             bedReferenceId: bed.bedReferenceId,
             bedName: bed.bedName,
             wardName: bed.wardName,
@@ -67,17 +62,11 @@ export class BedUpdateComponent implements OnInit {
     save(): void {
         this.isSaving = true;
         const bed = this.createFromForm();
-        this.subscribeToSaveResponse(this.bedService.create(bed));
-        // if (bed.id !== undefined) {
-        //   this.subscribeToSaveResponse(this.bedService.update(bed));
-        // } else {
-        //   this.subscribeToSaveResponse(this.bedService.create(bed));
-        // }
+        this.subscribeToSaveResponse(this.bedService.update(bed));
     }
 
     private createFromForm(): IUpdateBedDTO {
         return {
-            //   ...new UpdateBedDTO(),
             bedReferenceId: this.editForm.get(['bedReferenceId'])!.value,
             bedName: this.editForm.get(['bedName'])!.value
                 ? this.editForm.get(['bedName'])!.value
@@ -90,7 +79,7 @@ export class BedUpdateComponent implements OnInit {
     protected subscribeToSaveResponse(result: Observable<HttpResponse<IBed>>): void {
         result.subscribe(
             () => this.onSaveSuccess(),
-            () => this.onSaveError()
+            error => this.onSaveError(error)
         );
     }
 
@@ -99,7 +88,7 @@ export class BedUpdateComponent implements OnInit {
         this.previousState();
     }
 
-    protected onSaveError(): void {
+    protected onSaveError(error: any): void {
         this.isSaving = false;
     }
 
