@@ -23,6 +23,7 @@
         </div>
         <button class="btn btn-primary ml-2" (click)="filterWards()">Search</button>
     </div>
+
     <div class="table-responsive" *ngIf="wards">
         <table class="table table-striped">
             <thead>
@@ -70,6 +71,9 @@
             </tr>
             </tbody>
         </table>
+    </div>
+    <div *ngIf="wards && filteredWards && filteredWards.length === 0" class="alert alert-warning mt-3">
+        No records found.
     </div>
     <div *ngIf="wards && wards.length">
         <div class="row justify-content-center">
