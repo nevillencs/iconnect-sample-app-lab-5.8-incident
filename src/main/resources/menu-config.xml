@@ -5,11 +5,6 @@
         <Item id="51" name="51" title="global.menu.entities.ward" location="ward" />
         <Item id="52" name="52" title="global.menu.entities.bed" location="bed" />
       </Menu>
-       <Menu id="6" name="6" title="global.menu.entities.main" iconCSS="th-list">
-         <Item id="61" name="61" title="global.menu.entities.incident" location="incident" />
-         <Item id="62" name="62" title="global.menu.entities.item" location="item" />
-         <!--iconnect-needle-entity-menu - iConnect will add entity menu items here-->
-       </Menu>  
        <Menu id="7" name="7" title="approval.list" iconCSS="th-list">
            <Item id="70" name="70" title="approval.approvalRequest.home.title" location="approval-request" />
            <Item id="71" name="71" title="generalApproval.home.title" location="general-approval-createorupdate" /> 
