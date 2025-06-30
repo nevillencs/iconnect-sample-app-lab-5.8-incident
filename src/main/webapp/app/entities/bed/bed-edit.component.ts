@@ -9,6 +9,7 @@ import { IBed, IUpdateBedDTO } from 'app/shared/model/bed.model';
 import { IWard } from 'app/shared/model/ward.model';
 import { BedService } from './bed.service';
 import { WardService } from '../ward/ward.service';
+import { JhiAlertService } from 'ng-jhipster';
 
 type SelectableEntity = IBed;
 
@@ -34,6 +35,7 @@ export class BedEditComponent implements OnInit {
         protected bedService: BedService,
         protected wardService: WardService,
         protected activatedRoute: ActivatedRoute,
+        protected jhiAlertService: JhiAlertService,
         protected router: Router,
         private fb: FormBuilder
     ) {}
@@ -105,7 +107,11 @@ export class BedEditComponent implements OnInit {
 
     protected onSaveError(errorMessage: string): void {
         this.isSaving = false;
-        this.router.navigate(['/bed'], { queryParams: { error: errorMessage } });
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    private onError(errorMessage: string): void {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 
     trackById(index: number, item: SelectableEntity): any {

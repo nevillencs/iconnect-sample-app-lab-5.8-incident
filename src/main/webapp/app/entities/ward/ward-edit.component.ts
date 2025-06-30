@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 
 import { IWard, Ward } from 'app/shared/model/ward.model';
 import { WardService } from './ward.service';
+import { JhiAlertService } from 'ng-jhipster';
 
 type SelectableEntity = IWard;
 
@@ -32,7 +33,8 @@ export class WardEditComponent implements OnInit {
         protected wardService: WardService,
         protected activatedRoute: ActivatedRoute,
         protected router: Router,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private jhiAlertService: JhiAlertService
     ) {}
 
     ngOnInit(): void {
@@ -99,7 +101,11 @@ export class WardEditComponent implements OnInit {
 
     protected onSaveError(errorMessage: string): void {
         this.isSaving = false;
-        this.router.navigate(['/ward'], { queryParams: { error: errorMessage } });
+        this.jhiAlertService.error(errorMessage, null, null);
+    }
+
+    private onError(errorMessage: string): void {
+        this.jhiAlertService.error(errorMessage, null, null);
     }
 
     trackById(index: number, item: SelectableEntity): any {

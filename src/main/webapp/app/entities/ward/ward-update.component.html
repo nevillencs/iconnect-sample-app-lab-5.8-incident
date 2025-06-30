@@ -4,8 +4,7 @@
             <h2 id="ic-ward-heading" jhiTranslate="iconnectSampleAppLabApp.ward.home.createLabel">Add Ward</h2>
 
             <div class="row">
-                <ic-alert-error></ic-alert-error>
-
+                <ic-alert></ic-alert>
                 <div class="form group col-6" [hidden]="!editForm.get('id')!.value">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
