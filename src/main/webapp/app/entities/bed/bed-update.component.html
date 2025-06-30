@@ -44,7 +44,7 @@
                 <div class="form-group col-6">
                     <label class="form-control-label" jhiTranslate="iconnectSampleAppLabApp.bed.wardAllocationDate" for="field_wardAllocationDate">Ward Allocation Date</label>
                     <div class="input-group">
-                        <input id="field_wardAllocationDate" type="text" class="form-control" name="wardAllocationDate" ngbDatepicker #wardAllocationDateDp="ngbDatepicker" formControlName="wardAllocationDate" readonly/>
+                        <input id="field_wardAllocationDate" type="date" class="form-control" name="wardAllocationDate" ngbDatepicker #wardAllocationDateDp="ngbDatepicker" formControlName="wardAllocationDate" readonly/>
                         <span class="input-group-append">
                             <button type="button" class="btn btn-secondary" (click)="wardAllocationDateDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
                         </span>

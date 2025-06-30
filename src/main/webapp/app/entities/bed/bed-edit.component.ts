@@ -67,8 +67,6 @@ export class BedEditComponent implements OnInit {
     save(): void {
         this.isSaving = true;
         const bed = this.createFromForm();
-        // eslint-disable-next-line no-console
-        console.log('BED:', bed);
         this.subscribeToSaveResponse(this.bedService.update(bed));
     }
 

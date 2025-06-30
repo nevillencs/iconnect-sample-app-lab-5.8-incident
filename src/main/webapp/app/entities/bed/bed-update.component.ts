@@ -10,27 +10,27 @@ import { IWard } from 'app/shared/model/ward.model';
 import { BedService } from './bed.service';
 import { WardService } from '../ward/ward.service';
 import { JhiAlertService } from 'ng-jhipster';
+import { CustomDateParserFormatter } from 'app/shared/util/date-formatter';
+import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 type SelectableEntity = IBed;
 
 @Component({
     selector: 'ic-bed-update',
-    templateUrl: './bed-update.component.html'
+    templateUrl: './bed-update.component.html',
+    providers: [{ provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter }]
 })
 export class BedUpdateComponent implements OnInit {
     private bed: IBed;
     isSaving: Boolean;
     bedDateDp: any;
     wardNames: string[] = [];
-
     editForm = this.fb.group({
-        // id: [],
         bedReferenceId: [null, [Validators.required, Validators.pattern(/^BED_\d{2}$/)]],
         bedName: [null, []],
         wardName: [null, [Validators.required]],
-        wardAllocationDate: [null, [Validators.required]]
-        // wardAllocationDate: [{ year: 2024, month: 6, day: 15 }, [Validators.required]]
-        // wardAllocationDate: ['2025-06-14', [Validators.required]]
+        wardAllocationDate: [moment(), [Validators.required]]
     });
 
     constructor(
@@ -38,28 +38,18 @@ export class BedUpdateComponent implements OnInit {
         protected wardService: WardService,
         protected activatedRoute: ActivatedRoute,
         protected jhiAlertService: JhiAlertService,
+        protected dateFormatter: NgbDateParserFormatter,
         protected router: Router,
         private fb: FormBuilder
     ) {}
 
     ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({ bed }) => {
-            this.updateForm(bed);
-        });
+        // this.activatedRoute.data.subscribe(({ bed }) => {
+        //     this.updateForm(bed);
+        // });
         this.wardService.query().subscribe(response => {
             const wards: IWard[] = response.body || [];
             this.wardNames = wards.map(ward => ward.wardName).sort((a, b) => a.localeCompare(b));
-        });
-        // this.editForm.get('wardAllocationDate').setValue({ year: 2024, month: 6, day: 15 });
-    }
-
-    updateForm(bed: IUpdateBedDTO): void {
-        this.editForm.patchValue({
-            // id: bed.id,
-            bedReferenceId: bed.bedReferenceId,
-            bedName: bed.bedName,
-            wardName: bed.wardName,
-            wardAllocationDate: bed.wardAllocationDate
         });
     }
 
@@ -75,7 +65,6 @@ export class BedUpdateComponent implements OnInit {
 
     private createFromForm(): IUpdateBedDTO {
         return {
-            //   ...new UpdateBedDTO(),
             bedReferenceId: this.editForm.get(['bedReferenceId'])!.value,
             bedName: this.editForm.get(['bedName'])!.value
                 ? this.editForm.get(['bedName'])!.value
