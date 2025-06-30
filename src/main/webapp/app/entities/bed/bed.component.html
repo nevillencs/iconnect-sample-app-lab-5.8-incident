@@ -29,7 +29,7 @@
             <thead>
                 <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
                 <th><span jhiTranslate="global.field.sn">SN</span></th>
-                <th jhiSortBy="wardName"><span jhiTranslate="iconnectSampleAppLabApp.bed.wardName">Ward Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+                <th><span jhiTranslate="iconnectSampleAppLabApp.bed.wardName">Ward Name</span>
                 <th jhiSortBy="bedReferenceId"><span jhiTranslate="iconnectSampleAppLabApp.bed.bedReferenceId">Bed Reference ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
                 <th jhiSortBy="bedName"><span jhiTranslate="iconnectSampleAppLabApp.bed.bedName">Bed Name</span> <fa-icon [icon]="'sort'"></fa-icon></th>
                 <th></th>
