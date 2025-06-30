@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IBed, IUpdateBedDTO } from 'app/shared/model/bed.model';
@@ -23,6 +23,7 @@ export class BedEditComponent implements OnInit {
     wardNames: string[] = [];
 
     editForm = this.fb.group({
+        id: [],
         bedReferenceId: [null, [Validators.required, Validators.pattern(/^BED_\d{2}$/)]],
         bedName: [null, []],
         wardName: [null, [Validators.required]],
@@ -33,6 +34,7 @@ export class BedEditComponent implements OnInit {
         protected bedService: BedService,
         protected wardService: WardService,
         protected activatedRoute: ActivatedRoute,
+        protected router: Router,
         private fb: FormBuilder
     ) {}
 
@@ -48,6 +50,7 @@ export class BedEditComponent implements OnInit {
 
     updateForm(bed: IUpdateBedDTO): void {
         this.editForm.patchValue({
+            id: bed.id,
             bedReferenceId: bed.bedReferenceId,
             bedName: bed.bedName,
             wardName: bed.wardName,
@@ -62,11 +65,14 @@ export class BedEditComponent implements OnInit {
     save(): void {
         this.isSaving = true;
         const bed = this.createFromForm();
+        // eslint-disable-next-line no-console
+        console.log('BED:', bed);
         this.subscribeToSaveResponse(this.bedService.update(bed));
     }
 
     private createFromForm(): IUpdateBedDTO {
         return {
+            id: this.editForm.get(['id'])!.value,
             bedReferenceId: this.editForm.get(['bedReferenceId'])!.value,
             bedName: this.editForm.get(['bedName'])!.value
                 ? this.editForm.get(['bedName'])!.value
@@ -79,7 +85,7 @@ export class BedEditComponent implements OnInit {
     protected subscribeToSaveResponse(result: Observable<HttpResponse<IBed>>): void {
         result.subscribe(
             () => this.onSaveSuccess(),
-            error => this.onSaveError(error)
+            error => this.onSaveError(this.getErrorMessage(error))
         );
     }
 
@@ -88,8 +94,18 @@ export class BedEditComponent implements OnInit {
         this.previousState();
     }
 
-    protected onSaveError(error: any): void {
+    private getErrorMessage(error: any): string {
+        const errorHeader = error.headers?.get('X-iconnectSampleAppLabApp-error');
+        const errorMsg = error.headers?.get('X-iconnectSampleAppLabApp-message');
+        if (errorMsg) {
+            return errorMsg;
+        }
+        return error?.message || 'An error occurred';
+    }
+
+    protected onSaveError(errorMessage: string): void {
         this.isSaving = false;
+        this.router.navigate(['/bed'], { queryParams: { error: errorMessage } });
     }
 
     trackById(index: number, item: SelectableEntity): any {

@@ -3,11 +3,19 @@ package com.ncs.iconnect.sample.lab.bed.domain;
 import java.time.LocalDate;
 
 public class CreateBedDTO {
+    private Long id;
     private String bedReferenceId;
     private String bedName;
     private String wardName = null;
     private LocalDate wardAllocationDate;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getBedReferenceId() {
         return bedReferenceId;
     }

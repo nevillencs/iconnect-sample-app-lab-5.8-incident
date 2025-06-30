@@ -72,8 +72,14 @@ public class WardService implements WardServiceInterface{
         else if (entity.getWardName() == null) {
             return null;
         }
-        if (wardRepository.findByWardReferenceId(entity.getWardReferenceId()).isPresent()) {
+        Optional<Ward> wardByReferenceId = wardRepository.findByWardReferenceId(entity.getWardReferenceId());
+        if (wardByReferenceId.isPresent() && !wardByReferenceId.get().getId().equals(entity.getId())) {
             throw new EntityExistsException("Ward Reference ID in use");
+        }
+
+        Optional<Ward> wardByName = wardRepository.findByWardName(entity.getWardName());
+        if (wardByName.isPresent() && !wardByName.get().getId().equals(entity.getId())) {
+            throw new EntityExistsException("Ward Name in use");
         }
         return wardRepository.save(entity);
     }

@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.net.URI;
@@ -82,10 +83,17 @@ public class BedResource {
     @PostMapping("/beds")
     public ResponseEntity<BedDTO> createBed(@Valid @RequestBody CreateBedDTO bed) throws URISyntaxException {
         log.debug("REST request to save Bed : {}", bed);
-        BedDTO result = bedService.add(bed);
-        return ResponseEntity.created(new URI("/api/beds/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        try {
+            BedDTO result = bedService.add(bed);
+            return ResponseEntity.created(new URI("/api/beds/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }
+        catch (EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", e.getMessage()))
+                .body(null);
+        }
     }
 
     /**
@@ -103,10 +111,17 @@ public class BedResource {
         if (bed.getBedReferenceId() == null) {
             return createBed(bed);
         }
-        BedDTO result = bedService.update(bed);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        try {
+            BedDTO result = bedService.update(bed);
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        }
+        catch (EntityExistsException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", e.getMessage()))
+                .body(null);
+        }
     }
 
     /**

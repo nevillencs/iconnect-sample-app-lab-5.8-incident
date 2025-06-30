@@ -70,6 +70,15 @@ export class BedComponent implements OnInit, OnDestroy {
         this.wardService.query().subscribe(data => {
             this.wards = data.body || [];
         });
+        this.activatedRoute.queryParams.subscribe(params => {
+            this.onError(params['error']);
+            this.router.navigate([], {
+                relativeTo: this.activatedRoute,
+                queryParams: { error: null },
+                queryParamsHandling: 'merge',
+                replaceUrl: true
+            });
+        });
     }
 
     loadPage(page: number): void {

@@ -20,6 +20,7 @@ export class Bed implements IBed {
 }
 
 export interface IUpdateBedDTO {
+    id?: number;
     bedReferenceId?: string;
     bedName?: string;
     wardName?: string | null;
@@ -28,6 +29,7 @@ export interface IUpdateBedDTO {
 
 export class UpdateBedDTO implements IUpdateBedDTO {
     constructor(
+        public id?: number,
         public bedReferenceId?: string,
         public wardAllocationDate?: moment.Moment,
         public bedName?: string,

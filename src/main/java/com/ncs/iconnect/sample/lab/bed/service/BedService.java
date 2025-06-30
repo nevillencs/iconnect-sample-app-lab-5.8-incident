@@ -44,21 +44,22 @@ public class BedService implements BedServiceInterface {
 
     @Override
     public BedDTO add(CreateBedDTO bedDto) {
-        Optional<Ward> ward = wardRepository.findByWardName(bedDto.getWardName());
-        if (!ward.isPresent()) {
-            throw new EntityNotFoundException("Ward not found. Check upstream ward names validation.");
-        }
-        if (bedRepository.findByBedReferenceId(bedDto.getBedReferenceId()).isPresent()) {
+        Ward ward = wardRepository.findByWardName(bedDto.getWardName())
+            .orElseThrow(() -> new EntityNotFoundException("Ward not found. Check upstream ward names validation."));
+
+        Optional<Bed> existingBed = bedRepository.findByBedReferenceId(bedDto.getBedReferenceId());
+        if (existingBed.isPresent()) {
             throw new EntityExistsException(String.format(
                 "Bed Reference ID in use for '%s' '%s'",
-                ward.get().getWardReferenceId(),
-                ward.get().getWardName()));
+                existingBed.get().getWard().getWardReferenceId(),
+                existingBed.get().getWard().getWardName()));
         }
-        else if (bedRepository.findByBedName(bedDto.getBedName()).isPresent()) {
+        existingBed = bedRepository.findByBedName(bedDto.getBedName());
+        if (bedRepository.findByBedName(bedDto.getBedName()).isPresent()) {
             throw new EntityExistsException(String.format(
                 "Bed Name in use for '%s' '%s'",
-                ward.get().getWardReferenceId(),
-                ward.get().getWardName()));
+                existingBed.get().getWard().getWardReferenceId(),
+                existingBed.get().getWard().getWardName()));
         }
         Bed entity = toEntity(bedDto);
         return toDto(bedRepository.save(entity));
@@ -68,24 +69,23 @@ public class BedService implements BedServiceInterface {
     public BedDTO update(CreateBedDTO bedDto) {
         Ward ward = wardRepository.findByWardName(bedDto.getWardName())
             .orElseThrow(() -> new EntityNotFoundException("Ward not found. Check upstream ward names validation."));
-        Bed oldBed = bedRepository.findByBedReferenceId(bedDto.getBedReferenceId())
-            .orElseThrow(() -> new EntityNotFoundException("Old bed doesn't exist"));
 
-        if (bedRepository.findByBedReferenceId(bedDto.getBedReferenceId())
-            .filter(b -> !b.getId().equals(oldBed.getId()))
-            .isPresent()) {
+        Bed oldBed = bedRepository.findById(bedDto.getId())
+            .orElseThrow(() -> new EntityNotFoundException("Bed not found with id: " + bedDto.getId()));
+
+        Optional<Bed> duplicateBed = bedRepository.findByBedReferenceId(bedDto.getBedReferenceId());
+        if (duplicateBed.isPresent() && !duplicateBed.get().getId().equals(bedDto.getId())) {
             throw new EntityExistsException(String.format(
                 "Bed Reference ID in use for '%s' '%s'",
-                ward.getWardReferenceId(),
-                ward.getWardName()));
+                duplicateBed.get().getWard().getWardReferenceId(),
+                duplicateBed.get().getWard().getWardName()));
         }
-        else if (bedRepository.findByBedName(bedDto.getBedName())
-            .filter(b -> !b.getId().equals(oldBed.getId()))
-            .isPresent()) {
+        duplicateBed = bedRepository.findByBedName(bedDto.getBedName());
+        if (duplicateBed.isPresent() && !duplicateBed.get().getId().equals(bedDto.getId())) {
             throw new EntityExistsException(String.format(
                 "Bed Name in use for '%s' '%s'",
-                ward.getWardReferenceId(),
-                ward.getWardName()));
+                duplicateBed.get().getWard().getWardReferenceId(),
+                duplicateBed.get().getWard().getWardName()));
         }
         oldBed.setBedName(bedDto.getBedName());
         oldBed.setWardAllocationDate(bedDto.getWardAllocationDate());

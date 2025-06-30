@@ -61,7 +61,7 @@ public class WardResource {
                 .body(result);
         } catch (EntityExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", "Ward Reference ID in use"))
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", e.getMessage()))
                 .body(null);
         }
     }
@@ -88,7 +88,7 @@ public class WardResource {
                 .body(result);
         } catch (EntityExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", "Ward Reference ID in use"))
+                .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "entityexists", e.getMessage()))
                 .body(null);
         }
     }

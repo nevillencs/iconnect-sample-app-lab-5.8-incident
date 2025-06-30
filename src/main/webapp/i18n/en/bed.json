@@ -10,9 +10,9 @@
                 "createLabel": "Create a new Bed",
                 "createOrEditLabel": "Create or edit a Bed"
             },
-            "created": "“Bed details added successfully. Do you want to add another new bed?",
-            "updated": "A Bed is updated with identifier {{ param }}",
-            "deleted": "A Bed is deleted with identifier {{ param }}",
+            "created": "Bed details added successfully. Do you want to add another new bed?",
+            "updated": "Bed details updated successfully",
+            "deleted": "Bed deleted successfully",
             "delete": {
                 "question": "Are you sure you want to delete Bed {{ id }}?"
             },

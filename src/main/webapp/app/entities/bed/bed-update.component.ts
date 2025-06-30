@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { IBed, Bed, IUpdateBedDTO, UpdateBedDTO } from 'app/shared/model/bed.model';
@@ -36,6 +36,7 @@ export class BedUpdateComponent implements OnInit {
         protected bedService: BedService,
         protected wardService: WardService,
         protected activatedRoute: ActivatedRoute,
+        protected router: Router,
         private fb: FormBuilder
     ) {}
 
@@ -68,11 +69,6 @@ export class BedUpdateComponent implements OnInit {
         this.isSaving = true;
         const bed = this.createFromForm();
         this.subscribeToSaveResponse(this.bedService.create(bed));
-        // if (bed.id !== undefined) {
-        //   this.subscribeToSaveResponse(this.bedService.update(bed));
-        // } else {
-        //   this.subscribeToSaveResponse(this.bedService.create(bed));
-        // }
     }
 
     private createFromForm(): IUpdateBedDTO {
@@ -90,8 +86,17 @@ export class BedUpdateComponent implements OnInit {
     protected subscribeToSaveResponse(result: Observable<HttpResponse<IBed>>): void {
         result.subscribe(
             () => this.onSaveSuccess(),
-            () => this.onSaveError()
+            error => this.onSaveError(this.getErrorMessage(error))
         );
+    }
+
+    private getErrorMessage(error: any): string {
+        const errorHeader = error.headers?.get('X-iconnectSampleAppLabApp-error');
+        const errorMsg = error.headers?.get('X-iconnectSampleAppLabApp-message');
+        if (errorMsg) {
+            return errorMsg;
+        }
+        return error?.message || 'An error occurred';
     }
 
     protected onSaveSuccess(): void {
@@ -99,8 +104,9 @@ export class BedUpdateComponent implements OnInit {
         this.previousState();
     }
 
-    protected onSaveError(): void {
+    protected onSaveError(errorMessage: string): void {
         this.isSaving = false;
+        this.router.navigate(['/bed'], { queryParams: { error: errorMessage } });
     }
 
     trackById(index: number, item: SelectableEntity): any {

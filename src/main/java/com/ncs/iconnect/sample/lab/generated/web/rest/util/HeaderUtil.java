@@ -40,6 +40,7 @@ public final class HeaderUtil {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-iconnectSampleAppLabApp-error", "error." + errorKey);
         headers.add("X-iconnectSampleAppLabApp-params", entityName);
+        headers.add("X-iconnectSampleAppLabApp-message", defaultMessage);
         return headers;
     }
 
