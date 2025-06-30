@@ -56,10 +56,10 @@ public class WardService implements WardServiceInterface{
     }
     @Override
     @Transactional(readOnly = true)
-    public Ward find(Long id) {
+    public WardDTO find(Long id) {
         Optional<Ward> ward = wardRepository.findById(id);
         if (ward.isPresent()) {
-            return ward.get();
+            return toDto(ward.get());
         } else {
             throw new EntityNotFoundException("Ward not found with id: " + id);
         }

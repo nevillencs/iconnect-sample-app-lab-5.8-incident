@@ -114,10 +114,10 @@ public class WardResource {
      * @return the ResponseEntity with status 200 (OK) and with body the ward, or with status 404 (Not Found)
      */
     @GetMapping("/wards/{id}")
-    public ResponseEntity<Ward> getWard(@PathVariable Long id) {
+    public ResponseEntity<WardDTO> getWard(@PathVariable Long id) {
         log.debug("REST request to get Ward : {}", id);
         try {
-            Ward ward = wardService.find(id);
+            WardDTO ward = wardService.find(id);
             return ResponseEntity.ok(ward);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.notFound().build();

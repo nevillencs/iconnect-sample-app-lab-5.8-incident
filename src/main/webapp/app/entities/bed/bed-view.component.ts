@@ -54,26 +54,25 @@ export class BedViewComponent implements OnInit {
         window.history.back();
     }
 
-    // save(): void {
-    //   this.isSaving = true;
-    //   const bed = this.createFromForm();
-    //   if (bed.id !== undefined) {
-    //     this.subscribeToSaveResponse(this.bedService.update(bed));
-    //   } else {
-    //     this.subscribeToSaveResponse(this.bedService.create(bed));
-    //   }
-    // }
+    save(): void {
+        this.isSaving = true;
+        const bed = this.createFromForm();
+        if (bed.id !== undefined) {
+            this.subscribeToSaveResponse(this.bedService.update(bed));
+        } else {
+            this.subscribeToSaveResponse(this.bedService.create(bed));
+        }
+    }
 
-    // private createFromForm(): IBed {
-    //   return {
-    //     ...new Bed(),
-    //     id: this.editForm.get(['id'])!.value,
-    //     bedReferenceId: this.editForm.get(['bedReferenceId'])!.value,
-    //     bedName: this.editForm.get(['bedName'])!.value,
-    //     ward: this.editForm.get(['bedClassType'])!.value,
-    //     bedLocation: this.editForm.get(['bedLocation'])!.value
-    //   };
-    // }
+    private createFromForm(): IBed {
+        return {
+            ...new Bed(),
+            id: this.editForm.get(['id'])!.value,
+            bedReferenceId: this.editForm.get(['bedReferenceId'])!.value,
+            bedName: this.editForm.get(['bedName'])!.value,
+            ward: this.editForm.get(['bedClassType'])!.value
+        };
+    }
 
     protected subscribeToSaveResponse(result: Observable<HttpResponse<IBed>>): void {
         result.subscribe(

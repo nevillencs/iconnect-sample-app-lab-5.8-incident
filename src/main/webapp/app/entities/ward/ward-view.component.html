@@ -1,6 +1,6 @@
 <div class="row justify-content-center">
     <div class="col-12">
-        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+        <form name="editForm" role="form" novalidate [formGroup]="editForm">
             <h2 id="ic-ward-heading" jhiTranslate="iconnectSampleAppLabApp.ward.home.view">View Ward</h2>
 
             <div class="row">
@@ -39,14 +39,37 @@
                     <label class="form-control-label" for="field_numberOfBeds">Number of Beds</label>
                     <input type="text" class="form-control" [value]="numberOfBeds" readonly>
                 </div>
-
             </div>
+
+            <div class="table-responsive" *ngIf="beds && beds.length > 0; else noBeds">
+                <table class="table table-striped">
+                    <thead>
+                    <tr jhiSort>
+                    <!-- <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse"  [callback]="transition.bind(this)"> -->
+                    <th ><span jhiTranslate="global.field.sn">S/N</span></th>
+                    <th jhiSortBy="bedReferenceId"><span jhiTranslate="iconnectSampleAppLabApp.bed.bedReferenceId">Bed Reference ID</span></th>
+                    <th jhiSortBy="bedName"><span jhiTranslate="iconnectSampleAppLabApp.bed.bedName">Bed Name</span></th>
+                    <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let bed of beds;">
+                        <td>{{ bed.id }}</td>
+                        <td>{{bed.bedReferenceId}}</td>
+                        <td>{{bed.bedName}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
                     <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
             </div>
-
+            <ng-template #noBeds>
+                <div class="alert alert-info">No bed records</div>
+            </ng-template>
         </form>
     </div>
 </div>

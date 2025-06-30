@@ -7,7 +7,7 @@ public interface WardServiceInterface {
     public Page<WardDTO> findAll(Pageable pageable);
     public Page<WardDTO> search(String wardName, Pageable page);
     public Ward add(Ward entity);
-    public Ward find(Long id);
+    public WardDTO find(Long id);
     public Ward update(Ward entity);
     public void delete(Long id);
 }
